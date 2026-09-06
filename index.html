@@ -128,12 +128,6 @@
     background-color: rgba(255,255,255,0.38);
     transform: translateY(-1px);
   }
-  .btn-download:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    border-color: rgba(255,255,255,0.2);
-    transform: none;
-  }
   .upload-btn-wrapper input[type=file] {
     font-size: 100px;
     position: absolute;
@@ -267,10 +261,10 @@
 <header class="top">
   <div class="eyebrow">Smart Finder Co., Ltd.</div>
   <h1 class="brand">EXECUTIVE CASH FLOW DASHBOARD</h1>
-  <div class="sub">FY2026 · Cash-basis view · Auto-Sync to GitHub Enabled</div>
+  <div class="sub">FY2026 · Cash-basis view · Dynamic Workbook Parser Ready</div>
   <div class="header-bottom">
     <div>
-      <div class="period-pill" id="periodPill">● Active Data Loaded</div>
+      <div class="period-pill" id="periodPill">● Jan – Aug 2026 Actual &nbsp;|&nbsp; Sep – Dec ready for monthly close</div>
       <div class="scope-note" id="scopeNote">All Cash Movement — operating business activity plus non-operating / shareholder items combined.</div>
     </div>
     <div class="view-toggle" id="viewToggle">
@@ -289,12 +283,13 @@
     <button id="applyRange">Apply</button>
     <button id="resetRange">Reset (Full Year)</button>
 
+    <!-- Action Buttons Group -->
     <div class="action-btn-group">
       <div class="upload-btn-wrapper">
         <button class="btn-upload">📁 Upload Excel Update</button>
         <input type="file" id="fileUploader" accept=".xlsx, .xls, .csv" />
       </div>
-      <button class="btn-download" id="downloadBtn" disabled>📥 Download Active Excel</button>
+      <button class="btn-download" id="downloadBtn">📥 Download Excel File</button>
     </div>
 
     <span class="range-note" id="rangeNote"></span>
@@ -305,29 +300,29 @@
 
   <div class="kpi-row">
     <div class="kpi">
-      <div class="label" id="kpiBankLabel">Cash in Bank</div>
-      <div class="value" id="kpiBankValue">฿0</div>
-      <div class="delta pos" id="kpiBankDelta">-</div>
+      <div class="label" id="kpiBankLabel">Cash in Bank — 31 Aug 2026</div>
+      <div class="value" id="kpiBankValue">฿22,036,017</div>
+      <div class="delta pos" id="kpiBankDelta">▲ +5,648,445 since 1 Jan 2026</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiReceiptsLabel">YTD Receipts</div>
-      <div class="value" id="kpiReceiptsValue">฿0</div>
-      <div class="delta flat" id="kpiReceiptsDelta">-</div>
+      <div class="label" id="kpiReceiptsLabel">YTD Receipts (Jan–Aug)</div>
+      <div class="value" id="kpiReceiptsValue">฿56,538,493</div>
+      <div class="delta flat" id="kpiReceiptsDelta">August ฿7,527,667</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiPaidLabel">YTD Paid Out</div>
-      <div class="value" id="kpiPaidValue">฿0</div>
-      <div class="delta flat" id="kpiPaidDelta">-</div>
+      <div class="label" id="kpiPaidLabel">YTD Paid Out (Jan–Aug)</div>
+      <div class="value" id="kpiPaidValue">฿50,890,048</div>
+      <div class="delta flat" id="kpiPaidDelta">August ฿5,042,246</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiJulNetLabel">Latest Month Net</div>
-      <div class="value" id="kpiJulNetValue">฿0</div>
-      <div class="delta neg" id="kpiJulNetDelta">-</div>
+      <div class="label" id="kpiJulNetLabel">August Net Movement (YoY)</div>
+      <div class="value" id="kpiJulNetValue">฿2,485,422</div>
+      <div class="delta pos" id="kpiJulNetDelta">▲ +1,571,139 vs Aug 2025 (฿914,283)</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiYtdNetLabel">YTD Net Movement</div>
-      <div class="value" id="kpiYtdNetValue">฿0</div>
-      <div class="delta pos" id="kpiYtdNetDelta">-</div>
+      <div class="label" id="kpiYtdNetLabel">YTD Net Movement (Jan–Aug)</div>
+      <div class="value" id="kpiYtdNetValue">฿5,648,445</div>
+      <div class="delta pos" id="kpiYtdNetDelta">▲ +8,307,313 vs YTD 2025 (-฿2,658,868)</div>
     </div>
   </div>
 
@@ -335,7 +330,7 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h3 id="monthlyFlowTitle">Monthly Cash Flow</h3>
+          <h3 id="monthlyFlowTitle">Monthly Cash Flow — All, 2026</h3>
           <div class="desc" id="monthlyFlowDesc">Receipts vs. paid out by month, with net movement overlay</div>
         </div>
         <div class="legend-note">THB</div>
@@ -349,7 +344,7 @@
       <div class="card-head">
         <div>
           <h3>Cash in Bank by Account</h3>
-          <div class="desc">Month-end balance, by account</div>
+          <div class="desc">Month-end balance, Jan–Aug 2026 · not split by activity</div>
         </div>
       </div>
       <div class="chart-wrap" style="height:300px;">
@@ -361,7 +356,7 @@
       <div class="card-head">
         <div>
           <h3>Net Cash Movement — YoY</h3>
-          <div class="desc">Comparative Net Flow</div>
+          <div class="desc">2026 vs. 2025, by month (THB) · total only, 2025 source not split by activity</div>
         </div>
       </div>
       <div class="chart-wrap" style="height:270px;">
@@ -372,8 +367,8 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h3 id="expenseTitle">Expense Mix</h3>
-          <div class="desc" id="expenseDesc">Paid out breakdown</div>
+          <h3 id="expenseTitle">Expense Mix — All</h3>
+          <div class="desc" id="expenseDesc">YTD Jan–Aug 2026 · Total ฿50,890,048 paid out</div>
         </div>
       </div>
       <div class="chart-wrap" style="height:270px;">
@@ -384,10 +379,10 @@
     <div class="card full">
       <div class="card-head">
         <div>
-          <h3 id="revenueTitle">Revenue Receipts by Category</h3>
-          <div class="desc" id="revenueDesc">Cash-basis receipts, ranked</div>
+          <h3 id="revenueTitle">Revenue Receipts by Category — All</h3>
+          <div class="desc" id="revenueDesc">YTD Jan–Aug 2026 · Cash-basis receipts, ranked</div>
         </div>
-        <div class="legend-note" id="revenueTotalNote">Total ฿0</div>
+        <div class="legend-note" id="revenueTotalNote">Total ฿56,538,493</div>
       </div>
       <div class="chart-wrap" style="height:340px;">
         <canvas id="revenueBar" style="display:block;"></canvas>
@@ -396,7 +391,7 @@
     </div>
 
     <div class="card full">
-      <h3 id="tableTitle">Monthly Detail</h3>
+      <h3 id="tableTitle">Monthly Detail — All, 2026</h3>
       <div class="desc" id="tableDesc">Cash receipts, paid out, net movement and closing balance</div>
       <table class="detail" id="detailTable">
         <thead>
@@ -422,14 +417,14 @@
 Chart.defaults.font.family = "'Montserrat', sans-serif";
 Chart.defaults.color = '#6E6579';
 
-// ============ GITHUB CONFIGURATION ============
+// GITHUB AUTO-COMMIT CONFIGURATION
 const GITHUB_CONFIG = {
   token: "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", 
   repo: "thanandon-smartfinder/cashflow-dashboard",
   path: "index.html"
 };
 
-let uploadedFileStore = { blob: null, fileName: '' };
+let uploadedFileStore = { blob: null, fileName: 'SmartFinder_Executive_CashFlow_FY2026.xlsx' };
 
 let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
 
@@ -1014,10 +1009,6 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
 
   uploadedFileStore.blob = file;
   uploadedFileStore.fileName = file.name;
-  
-  const dlBtn = document.getElementById('downloadBtn');
-  dlBtn.disabled = false;
-  dlBtn.title = "Download: " + file.name;
 
   const reader = new FileReader();
   reader.onload = function(event) {
@@ -1031,10 +1022,10 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
 
       parseExecutiveWorkbook(matrix);
       
-      // เรียกใช้ฟังก์ชัน Auto-Commit ไปยัง GitHub Pages
+      // Auto-Sync to GitHub
       syncToGitHubAPI();
 
-      alert('อัปเดตข้อมูลจากไฟล์ Excel และส่งข้อมูลไปบันทึกบน GitHub Pages เรียบร้อยแล้ว!');
+      alert('อัปเดตข้อมูลจากไฟล์ Excel และทำการบันทึกข้อมูลเรียบร้อยแล้ว!');
     } catch (err) {
       alert('เกิดข้อผิดพลาดในการประมวลผลไฟล์ Excel: ' + err.message);
       console.error(err);
@@ -1043,12 +1034,38 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
   reader.readAsArrayBuffer(file);
 });
 
-// ฟังก์ชันส่งไฟล์ข้อมูลที่อัปเดตขึ้น GitHub API อัตโนมัติ
-async function syncToGitHubAPI() {
-  if (!GITHUB_CONFIG.token || GITHUB_CONFIG.token === "") {
-    console.log("ยังไม่ได้กำหนด GitHub Token");
-    return;
+// ฟังก์ชันสำหรับดาวน์โหลดไฟล์ Excel ได้ตลอดเวลา
+document.getElementById('downloadBtn').addEventListener('click', function() {
+  if (uploadedFileStore.blob) {
+    const url = URL.createObjectURL(uploadedFileStore.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = uploadedFileStore.fileName || 'Uploaded_CashFlow_Data.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } else {
+    exportCurrentDataToExcel();
   }
+});
+
+function exportCurrentDataToExcel() {
+  const wb = XLSX.utils.book_new();
+  const summaryData = [
+    ["Line Item"].concat(months.map(m => m + "-26")),
+    ["Total Cash Receipts"].concat(receiptsAll),
+    ["Total Cash Paid Out"].concat(paidoutAll),
+    ["Net Cash Movement"].concat(netAll),
+    ["Closing Cash Balance"].concat(closingAll)
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(summaryData);
+  XLSX.utils.book_append_sheet(wb, ws, "Annual Summary 2026");
+  XLSX.writeFile(wb, "SmartFinder_Executive_CashFlow_FY2026.xlsx");
+}
+
+async function syncToGitHubAPI() {
+  if (!GITHUB_CONFIG.token || GITHUB_CONFIG.token === "") return;
 
   try {
     const htmlContent = document.documentElement.outerHTML;
@@ -1061,14 +1078,11 @@ async function syncToGitHubAPI() {
       headers: { Authorization: `token ${GITHUB_CONFIG.token}` }
     });
     
-    if (!getFile.ok) {
-      console.error("ไม่สามารถดึงข้อมูลไฟล์จาก GitHub API ได้");
-      return;
-    }
+    if (!getFile.ok) return;
     
     const fileData = await getFile.json();
 
-    const updateFile = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+    await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
       method: "PUT",
       headers: {
         Authorization: `token ${GITHUB_CONFIG.token}`,
@@ -1080,29 +1094,10 @@ async function syncToGitHubAPI() {
         sha: fileData.sha
       })
     });
-
-    if (updateFile.ok) {
-      console.log("บันทึกไฟล์ทับลง GitHub Repository สำเร็จเรียบร้อยแล้ว");
-    }
   } catch (err) {
-    console.error("เกิดข้อผิดพลาดในการซิงก์ข้อมูลไป GitHub API:", err);
+    console.error("GitHub Sync Error:", err);
   }
 }
-
-document.getElementById('downloadBtn').addEventListener('click', function() {
-  if (!uploadedFileStore.blob) {
-    alert('ยังไม่มีไฟล์ Excel ที่ถูกอัปโหลดในระบบ');
-    return;
-  }
-  const url = URL.createObjectURL(uploadedFileStore.blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = uploadedFileStore.fileName || 'Uploaded_CashFlow_Data.xlsx';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
 
 function parseExecutiveWorkbook(matrix) {
   let headerRowIndex = -1;
