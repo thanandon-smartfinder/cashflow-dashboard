@@ -283,7 +283,7 @@
     <button id="applyRange">Apply</button>
     <button id="resetRange">Reset (Full Year)</button>
 
-    <!-- Action Buttons Group -->
+    <!-- Action Buttons -->
     <div class="action-btn-group">
       <div class="upload-btn-wrapper">
         <button class="btn-upload">📁 Upload Excel Update</button>
@@ -424,11 +424,13 @@ const GITHUB_CONFIG = {
   path: "index.html"
 };
 
-let uploadedFileStore = { blob: null, fileName: 'SmartFinder_Executive_CashFlow_FY2026.xlsx' };
+// ตัวแปรสำหรับเก็บไฟล์ต้นฉบับจริงที่คุณUpload เข้ามาล่าสุด
+let uploadedFileStore = { blob: null, fileName: '' };
 
+// **** ชุดข้อมูลตั้งต้นจากไฟล์ Excel 2026 (Jan–Aug 2026 Actual) ****
 let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
 
-let receiptsAll = [6267895.82, 7393709.71, 6997525.88, 8688452.55, 5288504.10, 8064279.35, 6338101.08, 7527667.26];
+let receiptsAll = [6267895.82, 7393709.71, 6997525.88, 8688452.55, 5288504.10, 8036636.60, 6338101.08, 7527667.26];
 let paidoutAll  = [5712623.91, 5459132.82, 8169568.51, 9676262.46, 6105600.75, 5045900.50, 5706356.20, 5042245.61];
 let netAll      = [555271.91, 1934576.89, -1172042.63, -987809.91, -817096.65, 3018378.85, 631744.88, 2485421.65];
 let closingAll  = [16942843.71, 18877420.60, 17705377.97, 16717568.06, 15900471.41, 18918850.26, 19550595.14, 22036016.79];
@@ -731,7 +733,7 @@ function renderCompareTable(labels, r25arr, r26arr, p25arr, p26arr, n25arr, n26a
     <td class="${pGrowT<=0?'pos-num':'neg-num'}">${fmtPctSigned(pGrowT)}</td>
     <td class="${tN25<0?'neg-num':'pos-num'}">${fmtTHBsigned(tN25)}</td>
     <td class="${tN26<0?'neg-num':'pos-num'}">${fmtTHBsigned(tN26)}</td>
-    <td class="${nChangeT<0?'neg-num':'pos-num'}">${fmtTHBsigned(nChangeT)}</td>`;
+    <td class="${nChangeT<0?'neg-num':'pos-num'}">${fmtPctSigned(nChangeT)}</td>`;
   tbody.appendChild(trTotal);
 }
 
@@ -1007,6 +1009,7 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
 
+  // บันทึกไฟล์ต้นฉบับจริงไว้ในเซสชัน
   uploadedFileStore.blob = file;
   uploadedFileStore.fileName = file.name;
 
@@ -1025,7 +1028,7 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
       // Auto-Sync to GitHub
       syncToGitHubAPI();
 
-      alert('อัปเดตข้อมูลจากไฟล์ Excel และทำการบันทึกข้อมูลเรียบร้อยแล้ว!');
+      alert('อัปเดตข้อมูลจากไฟล์ Excel และส่งข้อมูลเข้า GitHub เรียบร้อยแล้ว!');
     } catch (err) {
       alert('เกิดข้อผิดพลาดในการประมวลผลไฟล์ Excel: ' + err.message);
       console.error(err);
@@ -1034,13 +1037,15 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
   reader.readAsArrayBuffer(file);
 });
 
-// ฟังก์ชันสำหรับดาวน์โหลดไฟล์ Excel ได้ตลอดเวลา
+// **** ปุ่ม Download สามารถเปิดกดดาวน์โหลดได้ตลอดเวลา 100% ****
+// หากมีการอัปโหลดไฟล์เข้ามาในเซสชัน → จะส่งไฟล์ต้นฉบับจริงนั้นให้ดาวน์โหลด
+// หากเปิดดูปกติแบบยังไม่อัปโหลด → จะสร้างไฟล์รายงาน Excel ประจำปี 2026 ให้อัตโนมัติ
 document.getElementById('downloadBtn').addEventListener('click', function() {
   if (uploadedFileStore.blob) {
     const url = URL.createObjectURL(uploadedFileStore.blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = uploadedFileStore.fileName || 'Uploaded_CashFlow_Data.xlsx';
+    a.download = uploadedFileStore.fileName || '2026_SmartFinder_Executive_CashFlow.xlsx';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1061,7 +1066,7 @@ function exportCurrentDataToExcel() {
   ];
   const ws = XLSX.utils.aoa_to_sheet(summaryData);
   XLSX.utils.book_append_sheet(wb, ws, "Annual Summary 2026");
-  XLSX.writeFile(wb, "SmartFinder_Executive_CashFlow_FY2026.xlsx");
+  XLSX.writeFile(wb, "2026_SmartFinder_Executive_CashFlow.xlsx");
 }
 
 async function syncToGitHubAPI() {
