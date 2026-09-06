@@ -96,7 +96,6 @@
     position:relative; z-index:1;
   }
 
-  /* Action Buttons Group */
   .action-btn-group {
     display: flex;
     gap: 8px;
@@ -267,10 +266,10 @@
 <header class="top">
   <div class="eyebrow">Smart Finder Co., Ltd.</div>
   <h1 class="brand">EXECUTIVE CASH FLOW DASHBOARD</h1>
-  <div class="sub">FY2026 · Dynamic Workbook Parser & File Management Ready</div>
+  <div class="sub">FY2026 · Cash-basis view · Dynamic Workbook Parser Ready</div>
   <div class="header-bottom">
     <div>
-      <div class="period-pill" id="periodPill">● Active Data Loaded</div>
+      <div class="period-pill" id="periodPill">● Jan – Aug 2026 Actual &nbsp;|&nbsp; Sep – Dec ready for monthly close</div>
       <div class="scope-note" id="scopeNote">All Cash Movement — operating business activity plus non-operating / shareholder items combined.</div>
     </div>
     <div class="view-toggle" id="viewToggle">
@@ -289,7 +288,6 @@
     <button id="applyRange">Apply</button>
     <button id="resetRange">Reset (Full Year)</button>
 
-    <!-- Upload & Download Action Group -->
     <div class="action-btn-group">
       <div class="upload-btn-wrapper">
         <button class="btn-upload">📁 Upload Excel Update</button>
@@ -306,29 +304,29 @@
 
   <div class="kpi-row">
     <div class="kpi">
-      <div class="label" id="kpiBankLabel">Cash in Bank</div>
-      <div class="value" id="kpiBankValue">฿0</div>
-      <div class="delta pos" id="kpiBankDelta">-</div>
+      <div class="label" id="kpiBankLabel">Cash in Bank — 31 Aug 2026</div>
+      <div class="value" id="kpiBankValue">฿22,036,017</div>
+      <div class="delta pos" id="kpiBankDelta">▲ +5,648,445 since 1 Jan 2026</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiReceiptsLabel">YTD Receipts</div>
-      <div class="value" id="kpiReceiptsValue">฿0</div>
-      <div class="delta flat" id="kpiReceiptsDelta">-</div>
+      <div class="label" id="kpiReceiptsLabel">YTD Receipts (Jan–Aug)</div>
+      <div class="value" id="kpiReceiptsValue">฿56,538,493</div>
+      <div class="delta flat" id="kpiReceiptsDelta">August ฿7,527,667</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiPaidLabel">YTD Paid Out</div>
-      <div class="value" id="kpiPaidValue">฿0</div>
-      <div class="delta flat" id="kpiPaidDelta">-</div>
+      <div class="label" id="kpiPaidLabel">YTD Paid Out (Jan–Aug)</div>
+      <div class="value" id="kpiPaidValue">฿50,890,048</div>
+      <div class="delta flat" id="kpiPaidDelta">August ฿5,042,246</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiJulNetLabel">Latest Month Net</div>
-      <div class="value" id="kpiJulNetValue">฿0</div>
-      <div class="delta neg" id="kpiJulNetDelta">-</div>
+      <div class="label" id="kpiJulNetLabel">August Net Movement (YoY)</div>
+      <div class="value" id="kpiJulNetValue">฿2,485,422</div>
+      <div class="delta pos" id="kpiJulNetDelta">▲ +1,571,139 vs Aug 2025 (฿914,283)</div>
     </div>
     <div class="kpi">
-      <div class="label" id="kpiYtdNetLabel">YTD Net Movement</div>
-      <div class="value" id="kpiYtdNetValue">฿0</div>
-      <div class="delta pos" id="kpiYtdNetDelta">-</div>
+      <div class="label" id="kpiYtdNetLabel">YTD Net Movement (Jan–Aug)</div>
+      <div class="value" id="kpiYtdNetValue">฿5,648,445</div>
+      <div class="delta pos" id="kpiYtdNetDelta">▲ +8,307,313 vs YTD 2025 (-฿2,658,868)</div>
     </div>
   </div>
 
@@ -336,7 +334,7 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h3 id="monthlyFlowTitle">Monthly Cash Flow</h3>
+          <h3 id="monthlyFlowTitle">Monthly Cash Flow — All, 2026</h3>
           <div class="desc" id="monthlyFlowDesc">Receipts vs. paid out by month, with net movement overlay</div>
         </div>
         <div class="legend-note">THB</div>
@@ -350,7 +348,7 @@
       <div class="card-head">
         <div>
           <h3>Cash in Bank by Account</h3>
-          <div class="desc">Month-end balance, by account</div>
+          <div class="desc">Month-end balance, Jan–Aug 2026 · not split by activity</div>
         </div>
       </div>
       <div class="chart-wrap" style="height:300px;">
@@ -362,7 +360,7 @@
       <div class="card-head">
         <div>
           <h3>Net Cash Movement — YoY</h3>
-          <div class="desc">Comparative Net Flow</div>
+          <div class="desc">2026 vs. 2025, by month (THB) · total only, 2025 source not split by activity</div>
         </div>
       </div>
       <div class="chart-wrap" style="height:270px;">
@@ -373,8 +371,8 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h3 id="expenseTitle">Expense Mix</h3>
-          <div class="desc" id="expenseDesc">Paid out breakdown</div>
+          <h3 id="expenseTitle">Expense Mix — All</h3>
+          <div class="desc" id="expenseDesc">YTD Jan–Aug 2026 · Total ฿50,890,048 paid out</div>
         </div>
       </div>
       <div class="chart-wrap" style="height:270px;">
@@ -385,10 +383,10 @@
     <div class="card full">
       <div class="card-head">
         <div>
-          <h3 id="revenueTitle">Revenue Receipts by Category</h3>
-          <div class="desc" id="revenueDesc">Cash-basis receipts, ranked</div>
+          <h3 id="revenueTitle">Revenue Receipts by Category — All</h3>
+          <div class="desc" id="revenueDesc">YTD Jan–Aug 2026 · Cash-basis receipts, ranked</div>
         </div>
-        <div class="legend-note" id="revenueTotalNote">Total ฿0</div>
+        <div class="legend-note" id="revenueTotalNote">Total ฿56,538,493</div>
       </div>
       <div class="chart-wrap" style="height:340px;">
         <canvas id="revenueBar" style="display:block;"></canvas>
@@ -397,7 +395,7 @@
     </div>
 
     <div class="card full">
-      <h3 id="tableTitle">Monthly Detail</h3>
+      <h3 id="tableTitle">Monthly Detail — All, 2026</h3>
       <div class="desc" id="tableDesc">Cash receipts, paid out, net movement and closing balance</div>
       <table class="detail" id="detailTable">
         <thead>
@@ -417,7 +415,7 @@
 
 </main>
 
-<footer>Smart Finder Co., Ltd. — Executive Cash Flow Dashboard</footer>
+<footer>Smart Finder Co., Ltd. — Executive Cash Flow Dashboard · Source: 2026 New SmartFinder Executive CashFlow Update (02-09-2026)</footer>
 
 <script>
 Chart.defaults.font.family = "'Montserrat', sans-serif";
@@ -425,44 +423,51 @@ Chart.defaults.color = '#6E6579';
 
 let uploadedFileStore = { blob: null, fileName: '' };
 
-let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul'];
+let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
 
-let receiptsAll = [6267895.82, 7393709.71, 6997525.88, 8688452.55, 5288504.10, 8064279.35, 6338101.08];
-let paidoutAll  = [5712623.91, 5459132.82, 8169568.51, 9676262.46, 6105600.75, 5045900.50, 5706356.20];
-let netAll      = [555271.91, 1934576.89, -1172042.63, -987809.91, -817096.65, 3018378.85, 631744.88];
-let closingAll  = [16942843.71, 18877420.60, 17705377.97, 16717568.06, 15900471.41, 18918850.26, 19550595.14];
+// ---- All (total Jan-Aug 2026) ----
+let receiptsAll = [6267895.82, 7393709.71, 6997525.88, 8688452.55, 5288504.10, 8064279.35, 6338101.08, 7527667.26];
+let paidoutAll  = [5712623.91, 5459132.82, 8169568.51, 9676262.46, 6105600.75, 5045900.50, 5706356.20, 5042245.61];
+let netAll      = [555271.91, 1934576.89, -1172042.63, -987809.91, -817096.65, 3018378.85, 631744.88, 2485421.65];
+let closingAll  = [16942843.71, 18877420.60, 17705377.97, 16717568.06, 15900471.41, 18918850.26, 19550595.14, 22036016.79];
 
-let receiptsOp = [6267895.82, 7393709.71, 6997525.88, 8688452.55, 5288504.10, 8036636.60, 6338101.08];
-let paidoutOp  = [5306579.64, 5374007.82, 6617646.51, 5387550.34, 5709278.75, 5005920.50, 5651376.20];
-let netOp      = [961316.18, 2019701.89, 379879.37, 3300902.21, -420774.65, 3030716.10, 686724.88];
+// ---- Operating ----
+let receiptsOp = [6267895.82, 7393709.71, 6997525.88, 8688452.55, 5288504.10, 8036636.60, 6338101.08, 7527667.26];
+let paidoutOp  = [5306579.64, 5374007.82, 6617646.51, 5387550.34, 5709278.75, 5005920.50, 5651376.20, 4959234.11];
+let netOp      = [961316.18, 2019701.89, 379879.37, 3300902.21, -420774.65, 3030716.10, 686724.88, 2568433.15];
 
-let receiptsNonOp = [0, 0, 0, 0, 0, 27642.75, 0];
-let paidoutNonOp  = [406044.27, 85125.00, 1551922.00, 4288712.12, 396322.00, 39980.00, 54980.00];
-let netNonOp      = [-406044.27, -85125.00, -1551922.00, -4288712.12, -396322.00, -12337.25, -54980.00];
+// ---- Non-Operating ----
+let receiptsNonOp = [0, 0, 0, 0, 0, 27642.75, 0, 0];
+let paidoutNonOp  = [406044.27, 85125.00, 1551922.00, 4288712.12, 396322.00, 39980.00, 54980.00, 83011.50];
+let netNonOp      = [-406044.27, -85125.00, -1551922.00, -4288712.12, -396322.00, -12337.25, -54980.00, -83011.50];
 
-let receipts2025 = [4990637.85, 4853522.78, 6094872.62, 8326060.17, 4948446.11, 5356586.06, 9194547.96];
-let paidout2025  = [6252420.63, 5780775.44, 7422526.61, 10991223.37, 5973249.74, 4909854.81, 6007774.68];
-let netAll2025   = [-1261782.78, -927252.66, -1327653.99, -2665163.20, -1024803.63, 446731.25, 3186773.28];
-let closing2025  = [12298020, 11380767, 10043113, 7377950, 6353146, 6799877, 9986651];
+// ---- 2025 Compare ----
+let receipts2025 = [4990637.85, 4853522.78, 6094872.62, 8326060.17, 4948446.11, 5356586.06, 9194547.96, 6926199.11];
+let paidout2025  = [6252420.63, 5780775.44, 7422526.61, 10991223.37, 5973249.74, 4909854.81, 6007774.68, 6011916.35];
+let netAll2025   = [-1261782.78, -927252.66, -1327653.99, -2665163.20, -1024803.63, 446731.25, 3186773.28, 914282.76];
+let closing2025  = [12298020, 11380767, 10043113, 7377950, 6353146, 6799877, 9986651, 10900934];
 
-let acctADV     = [59667.31, 110156.55, 99803.67, 72145.33, 42794.57, 64254.74, 48883.28];
-let acctCurrent = [3424786.59, 3938763.01, 1954035.84, 1966749.41, 929446.10, 3370959.44, 3855995.71];
-let acctSaving  = [9093113.12, 13342705.12, 14405289.62, 14071280.83, 14771260.83, 15383865.36, 15383865.36];
-let acctOmise   = [4365276.69, 1485795.92, 1246248.84, 607392.49, 156969.91, 99770.72, 261850.79];
+// ---- Bank Accounts ----
+let acctADV     = [59667.31, 110156.55, 99803.67, 72145.33, 42794.57, 64254.74, 48883.28, 46896.90];
+let acctCurrent = [3424786.59, 3938763.01, 1954035.84, 1966749.41, 929446.10, 3370959.44, 3855995.71, 5899482.07];
+let acctSaving  = [9093113.12, 13342705.12, 14405289.62, 14071280.83, 14771260.83, 15383865.36, 15383865.36, 5383865.36];
+let acctOmise   = [4365276.69, 1485795.92, 1246248.84, 607392.49, 156969.91, 99770.72, 261850.79, 704772.46];
 
+// ---- Revenue Detail ----
 let revOpLabels = ['Annual Maintenance','Licenses Revenues','Services Fee (Imp/CS/Dev/Lock)','Cloud','PAX Machine Revenue',
   'SaaS-Subscription Fee','Hardware & Equipment','3rd Party Revenue','Traveling Fees','Access Control & Accessories',
   'SORASO ONE','Revenue Others','Transaction Fees'];
-let revOpData = [17299640,14294052,4579906,3840493,2813939,1981632,1355195,1221606,398663,411233,541902,143085,129480];
+let revOpData = [19577593.53, 16698210.47, 5289550.38, 4522979.93, 2949213.20, 2695726.01, 1482681.52, 1419182.90, 446546.83, 510635.25, 541902.35, 225186.76, 179083.87];
 
+// ---- Expense Detail ----
 let expOpLabels = ['Salary','Administrative','Cost of Sales & Svc.','Selling Expenses'];
-let expOpData   = [23428624,8974753,4402906,2246077];
+let expOpData   = [26663146.03, 9418241.38, 5229889.04, 2334513.95];
 
 let expAllLabels = ['Salary','Administrative','Cost of Sales & Svc.','Non-Operating','Selling Expenses'];
-let expAllData   = [23428624,8974753,4402906,6823085,2246077];
+let expAllData   = [26663146.03, 9418241.38, 5229889.04, 6906097.39, 2334513.95];
 
 let expNonOpLabels = ['Dividend','Fixed Asset Purchases','Other Non-Operating','Investment','Advance to Vietnam'];
-let expNonOpData   = [5118750, 954205, 736660, 10000, 3470];
+let expNonOpData   = [5118750, 954205, 819672.39, 10000, 3470];
 
 let REV_OP_TOTAL = 0, REV_NONOP_TOTAL = 0, EXP_OP_TOTAL = 0, EXP_ALL_TOTAL = 0, EXP_NONOP_TOTAL = 0;
 let revPairsAll = [], revPairsOp = [];
