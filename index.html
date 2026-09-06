@@ -285,11 +285,13 @@
 
     <!-- Action Buttons -->
     <div class="action-btn-group">
+      <div id="uploadStatusBadge" class="period-pill" style="background: rgba(30,125,92,0.25); border: 1px solid rgba(255,255,255,0.4); font-size: 11.5px; padding: 6px 12px;">✅ สถานะ: ไฟล์ต้นฉบับพร้อมดาวน์โหลด</div>
       <div class="upload-btn-wrapper">
         <button class="btn-upload">📁 Upload Excel Update</button>
         <input type="file" id="fileUploader" accept=".xlsx, .xls, .csv" />
       </div>
       <button class="btn-download" id="downloadBtn">📥 Download Original Excel</button>
+    </div>
     </div>
 
     <span class="range-note" id="rangeNote"></span>
@@ -1013,6 +1015,12 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
 
+  const statusBadge = document.getElementById('uploadStatusBadge');
+  if (statusBadge) {
+    statusBadge.style.background = 'rgba(230, 162, 60, 0.3)';
+    statusBadge.innerHTML = '⏳ กำลังแปลงไฟล์และประมวลผล...';
+  }
+
   uploadedFileStore.blob = file;
   uploadedFileStore.fileName = file.name;
 
@@ -1029,7 +1037,7 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
 
       parseExecutiveWorkbook(matrix);
 
-      // Convert uploaded file to Base64 string to embed in HTML before syncing to GitHub
+      // อ่านไฟล์ใหม่เพื่อแปลงเป็น Base64 Data URL สำหรับเขียนฝังลงในโค้ด HTML บน GitHub
       const fileReaderB64 = new FileReader();
       fileReaderB64.onload = function(b64Event) {
         const b64DataUrl = b64Event.target.result;
@@ -1042,8 +1050,11 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
       };
       fileReaderB64.readAsDataURL(file);
 
-      alert('อัปเดตข้อมูลสำเร็จ! ระบบกำลังซิงก์ไฟล์ต้นฉบับฉบับใหม่ล่าสุดไปยัง GitHub Pages...');
     } catch (err) {
+      if (statusBadge) {
+        statusBadge.style.background = 'rgba(147, 25, 20, 0.4)';
+        statusBadge.innerHTML = '❌ เกิดข้อผิดพลาดในการแปลงไฟล์';
+      }
       alert('เกิดข้อผิดพลาดในการประมวลผลไฟล์ Excel: ' + err.message);
       console.error(err);
     }
@@ -1078,15 +1089,28 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
 });
 
 async function syncToGitHubAPI(newFileBase64, newFileName) {
-  if (!GITHUB_CONFIG.token || GITHUB_CONFIG.token === "") return;
+  const statusBadge = document.getElementById('uploadStatusBadge');
+  if (!GITHUB_CONFIG.token || GITHUB_CONFIG.token === "") {
+    if (statusBadge) {
+      statusBadge.style.background = 'rgba(30, 125, 92, 0.3)';
+      statusBadge.innerHTML = '✅ แปลงไฟล์สำเร็จ (แสดงผลบนเบราว์เซอร์)';
+    }
+    return;
+  }
 
   try {
+    if (statusBadge) {
+      statusBadge.style.background = 'rgba(230, 162, 60, 0.3)';
+      statusBadge.innerHTML = '⏳ กำลังซิงก์บันทึกลง GitHub...';
+    }
+
+    // ดึงซอร์สโค้ด HTML ปัจจุบันบน DOM
     let htmlContent = document.documentElement.outerHTML;
 
-    // If new file is uploaded, replace the embedded base64 string in the HTML string before syncing!
+    // หากมีการ Upload ไฟล์ใหม่ ให้ทำการค้นหาและเขียนรหัส Base64 ของไฟล์ใหม่แทนที่ไฟล์เดิมในโค้ด HTML ก่อนจะส่งขึ้น GitHub
     if (newFileBase64 && newFileName) {
-      htmlContent = htmlContent.replace(/const EMBEDDED_EXCEL_BASE64 = "[^"]*";/, 'const EMBEDDED_EXCEL_BASE64 = "' + newFileBase64 + '";');
-      htmlContent = htmlContent.replace(/const EMBEDDED_EXCEL_FILENAME = "[^"]*";/, 'const EMBEDDED_EXCEL_FILENAME = "' + newFileName.replace(/"/g, '\"') + '";');
+      htmlContent = htmlContent.replace(/var EMBEDDED_EXCEL_BASE64 = "[^"]*";/, 'var EMBEDDED_EXCEL_BASE64 = "' + newFileBase64 + '";');
+      htmlContent = htmlContent.replace(/var EMBEDDED_EXCEL_FILENAME = "[^"]*";/, 'var EMBEDDED_EXCEL_FILENAME = "' + newFileName.replace(/"/g, '\"') + '";');
     }
 
     const utf8Bytes = new TextEncoder().encode(htmlContent);
@@ -1098,11 +1122,11 @@ async function syncToGitHubAPI(newFileBase64, newFileName) {
       headers: { Authorization: `token ${GITHUB_CONFIG.token}` }
     });
     
-    if (!getFile.ok) return;
+    if (!getFile.ok) throw new Error("ไม่สามารถเชื่อมต่อ GitHub API ได้");
     
     const fileData = await getFile.json();
 
-    await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+    const putRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
       method: "PUT",
       headers: {
         Authorization: `token ${GITHUB_CONFIG.token}`,
@@ -1114,8 +1138,21 @@ async function syncToGitHubAPI(newFileBase64, newFileName) {
         sha: fileData.sha
       })
     });
-    console.log("GitHub sync complete!");
+
+    if (putRes.ok) {
+      if (statusBadge) {
+        statusBadge.style.background = 'rgba(30, 125, 92, 0.4)';
+        statusBadge.innerHTML = '✅ แปลงไฟล์ & ซิงก์ GitHub สำเร็จ!';
+      }
+      alert('แปลงไฟล์และบันทึกลง GitHub สำเร็จเรียบร้อยแล้ว! ผู้บริหารสามารถเปิดลิงก์เพื่อดาวน์โหลดไฟล์ใหม่ล่าสุดได้แล้วครับ');
+    } else {
+      throw new Error("GitHub PUT failed");
+    }
   } catch (err) {
+    if (statusBadge) {
+      statusBadge.style.background = 'rgba(147, 25, 20, 0.4)';
+      statusBadge.innerHTML = '❌ ซิงก์ GitHub ไม่สำเร็จ';
+    }
     console.error("GitHub Sync Error:", err);
   }
 }
