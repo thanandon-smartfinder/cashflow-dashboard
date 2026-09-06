@@ -424,7 +424,7 @@ const GITHUB_CONFIG = {
   path: "index.html"
 };
 
-// ตัวแปรสำหรับเก็บไฟล์ต้นฉบับจริงที่คุณUpload เข้ามาล่าสุด
+// ตัวแปรเก็บไฟล์ Dynamic Upload
 let uploadedFileStore = { blob: null, fileName: '' };
 
 // **** ชุดข้อมูลตั้งต้นจากไฟล์ Excel 2026 (Jan–Aug 2026 Actual) ****
@@ -1009,7 +1009,6 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
 
-  // บันทึกไฟล์ต้นฉบับจริงไว้ในเซสชัน
   uploadedFileStore.blob = file;
   uploadedFileStore.fileName = file.name;
 
@@ -1028,7 +1027,7 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
       // Auto-Sync to GitHub
       syncToGitHubAPI();
 
-      alert('อัปเดตข้อมูลจากไฟล์ Excel และส่งข้อมูลเข้า GitHub เรียบร้อยแล้ว!');
+      alert('อัปเดตข้อมูลสำเร็จ! ปุ่ม Download สามารถใช้ออกไฟล์ต้นฉบับนี้ได้แล้ว');
     } catch (err) {
       alert('เกิดข้อผิดพลาดในการประมวลผลไฟล์ Excel: ' + err.message);
       console.error(err);
@@ -1037,27 +1036,31 @@ document.getElementById('fileUploader').addEventListener('change', function(e) {
   reader.readAsArrayBuffer(file);
 });
 
-// **** ปุ่ม Download สามารถเปิดกดดาวน์โหลดได้ตลอดเวลา 100% ****
-// หากมีการอัปโหลดไฟล์เข้ามาในเซสชัน → จะส่งไฟล์ต้นฉบับจริงนั้นให้ดาวน์โหลด
-// หากเปิดดูปกติแบบยังไม่อัปโหลด → จะสร้างไฟล์รายงาน Excel ประจำปี 2026 ให้อัตโนมัติ
+// **** ปุ่ม Download ทำหน้าที่ดึงเฉพาะไฟล์ต้นฉบับล่าสุดเท่านั้น ****
 document.getElementById('downloadBtn').addEventListener('click', function() {
-  if (uploadedFileStore.blob) {
-    const url = URL.createObjectURL(uploadedFileStore.blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = uploadedFileStore.fileName || '2026_SmartFinder_Executive_CashFlow.xlsx';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } else {
+  let fileBlob = uploadedFileStore.blob;
+  let fileName = uploadedFileStore.fileName || '2026-New SmartFinder Executive CashFlow_Update.xlsx';
+
+  if (!fileBlob) {
+    // กรณีที่ยังไม่มีการ Upload ใหม่ในเซสชันนั้น ให้สร้าง Blob จากไฟล์ Excel ล่าสุด
     exportCurrentDataToExcel();
+    return;
   }
+
+  const url = URL.createObjectURL(fileBlob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 });
 
 function exportCurrentDataToExcel() {
   const wb = XLSX.utils.book_new();
   const summaryData = [
+    ["SMART FINDER | ANNUAL CASH FLOW SUMMARY — FY2026"],
     ["Line Item"].concat(months.map(m => m + "-26")),
     ["Total Cash Receipts"].concat(receiptsAll),
     ["Total Cash Paid Out"].concat(paidoutAll),
@@ -1066,7 +1069,7 @@ function exportCurrentDataToExcel() {
   ];
   const ws = XLSX.utils.aoa_to_sheet(summaryData);
   XLSX.utils.book_append_sheet(wb, ws, "Annual Summary 2026");
-  XLSX.writeFile(wb, "2026_SmartFinder_Executive_CashFlow.xlsx");
+  XLSX.writeFile(wb, "2026-New SmartFinder Executive CashFlow_Update.xlsx");
 }
 
 async function syncToGitHubAPI() {
